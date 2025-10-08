@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cooking and Cleaning</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+    body {
+      background: linear-gradient(135deg, #f9d5e5, #fcd5ce, #f8edeb);
+      font-family: 'Poppins', sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    h1 {
+      color: #ff6f61;
+      font-size: 36px;
+      margin-bottom: 40px;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+    }
+
+    button {
+      padding: 14px 28px;
+      font-size: 18px;
+      background: linear-gradient(90deg, #ff9966, #ff5e62);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin: 5px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+    }
+
+    .task {
+      margin-top: 25px;
+      width: 350px;
+      background: rgba(255,255,255,0.3);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      transition: transform 0.3s;
+    }
+
+    .task:hover {
+      transform: translateY(-5px);
+    }
+
+    .task p {
+      font-size: 20px;
+      margin-bottom: 12px;
+      font-weight: 600;
+      color: #444;
+    }
+
+    .progress-container {
+      width: 100%;
+      background-color: rgba(255,255,255,0.5);
+      border-radius: 15px;
+      overflow: hidden;
+      height: 30px;
+      margin-bottom: 10px;
+      box-shadow: inset 0 3px 5px rgba(0,0,0,0.1);
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      text-align: center;
+      line-height: 30px;
+      color: white;
+      font-weight: 700;
+      border-radius: 15px;
+      transition: width 0.1s linear;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cooking and Cleaning</h1>
+  <button onclick="startTasks()">Start Tasks</button>
+  <button onclick="resetTasks()">Reset</button>
+
+  <div class="task">
+    <p>🍳 Cooking (<span id="cookTime">3</span>s)</p>
+    <div class="progress-container">
+      <div id="cookBar" class="progress-bar" style="background: linear-gradient(90deg, #ff9966, #ff5e62);">0%</div>
+    </div>
+  </div>
+
+  <div class="task">
+    <p>🧹 Cleaning (<span id="cleanTime">--</span>s)</p>
+    <div class="progress-container">
+      <div id="cleanBar" class="progress-bar" style="background: linear-gradient(90deg, #6ee7b7, #4fd1c5);">0%</div>
+    </div>
+  </div>
+
+  <script>
+    let cookInterval, cleanInterval;
+    let cookDuration = 3000;
+    let cleanDuration;
+
+    function startTasks() {
+      const cookBar = document.getElementById('cookBar');
+      const cleanBar = document.getElementById('cleanBar');
+      const cookTimeDisplay = document.getElementById('cookTime');
+      const cleanTimeDisplay = document.getElementById('cleanTime');
+
+      let cookWidth = 0;
+      let cleanWidth = 0;
+
+      cleanDuration = 1500 + Math.floor(Math.random() * 2500);
+      cleanTimeDisplay.innerText = (cleanDuration/1000).toFixed(1);
+
+      cookWidth = 0;
+      cookBar.style.width = '0%';
+      cookBar.innerText = '0%';
+      cookInterval = setInterval(() => {
+        cookWidth += 100 / (cookDuration / 50);
+        if (cookWidth >= 100) cookWidth = 100;
+        cookBar.style.width = cookWidth + '%';
+        cookBar.innerText = Math.round(cookWidth) + '%';
+        if (cookWidth >= 100) clearInterval(cookInterval);
+      }, 50);
+
+      cleanWidth = 0;
+      cleanBar.style.width = '0%';
+      cleanBar.innerText = '0%';
+      cleanInterval = setInterval(() => {
+        cleanWidth += 100 / (cleanDuration / 50);
+        if (cleanWidth >= 100) cleanWidth = 100;
+        cleanBar.style.width = cleanWidth + '%';
+        cleanBar.innerText = Math.round(cleanWidth) + '%';
+        if (cleanWidth >= 100) clearInterval(cleanInterval);
+      }, 50);
+    }
+
+    function resetTasks() {
+      clearInterval(cookInterval);
+      clearInterval(cleanInterval);
+      document.getElementById('cookBar').style.width = '0%';
+      document.getElementById('cookBar').innerText = '0%';
+      document.getElementById('cleanBar').style.width = '0%';
+      document.getElementById('cleanBar').innerText = '0%';
+      document.getElementById('cookTime').innerText = '3';
+      document.getElementById('cleanTime').innerText = '--';
+    }
+  </script>
+</body>
+</html>
